@@ -1,4 +1,4 @@
-name: 'Terraform Apply'
+name: 'Terraform destroy'
  
 on:
   workflow_dispatch:
@@ -29,16 +29,9 @@ jobs:
       run: terraform init
       working-directory: ${{env.working-directory}}
  
-    - name: Terraform Format
-      run: terraform fmt 
-      working-directory: ${{env.working-directory}}
-
-    - name: Terraform plan
-      run: terraform plan 
-      working-directory: ${{env.working-directory}}
  
-    - name: Terraform Apply
-      run: terraform apply -auto-approve  
+    - name: Terraform destroy
+      run: terraform destroy -auto-approve  
       working-directory: ${{env.working-directory}}
 
       
