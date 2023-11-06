@@ -1,8 +1,12 @@
 name: 'Terraform Apply'
- 
+
 on:
   workflow_dispatch:
- 
+    inputs:
+      destroy:
+        description: 'Destroy infrastructure'
+        required: false
+        default: 'false'
  
 jobs:
   terraform:
@@ -21,26 +25,30 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
  
- 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
  
     - name: Terraform Init
       run: terraform init
-      working-directory: ${{env.working-directory}}
+      working-directory: ${{ env.working-directory }}
  
     - name: Terraform Format
       run: terraform fmt 
-      working-directory: ${{env.working-directory}}
+      working-directory: ${{ env.working-directory }}
 
-    - name: Terraform plan
+    - name: Terraform Plan
       run: terraform plan 
-      working-directory: ${{env.working-directory}}
+      working-directory: ${{ env.working-directory }}
  
     - name: Terraform Apply
       run: terraform apply -auto-approve  
-      working-directory: ${{env.working-directory}}
+      working-directory: ${{ env.working-directory }}
 
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve
-        working-directory: ${{ env.working-directory }}
+    - name: Terraform Destroy
+      run: |
+        if [ "${{ github.event.inputs.destroy }}" == "true" ]; then
+          terraform destroy -auto-approve
+        else
+          echo "Not destroying infrastructure."
+        fi
+      working-directory: ${{ env.working-directory }}
