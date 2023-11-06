@@ -30,15 +30,15 @@ env:
             aws-region: us-east-1
        
      - name: Initialize Terraform
-        run: terraform init
+       run: terraform init
      - name: Apply Terraform Changes
-        run: terraform apply -auto-approve
+       run: terraform apply -auto-approve
 
 
-        dispatch_destroy:
-          runs-on: ubuntu-latest
-          needs: terraform
-          steps:
+  dispatch_destroy:
+    runs-on: ubuntu-latest
+    needs: terraform
+    steps:
       - name: Dispatch Destroy Workflow
         uses: peter-evans/workflow-dispatch@v2
         with:
