@@ -8,6 +8,7 @@ on:
         default: 'apply'
         options:
           - 'apply'
+          - 'destroy'
 env:
   BUCKET: newrelicpractice
   TFSTATE_FILE: terraform.tfstate
@@ -38,7 +39,7 @@ env:
           runs-on: ubuntu-latest
           needs: terraform
           steps:
-       - name: Dispatch Destroy Workflow
+      - name: Dispatch Destroy Workflow
         uses: peter-evans/workflow-dispatch@v2
         with:
           workflow: Terraform Destroy
