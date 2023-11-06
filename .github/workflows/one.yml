@@ -1,8 +1,12 @@
-name: 'Terraform Apply'
- 
+name: 'Terraform Apply/Destroy'
+
 on:
   workflow_dispatch:
- 
+    inputs:
+      action:
+        description: 'Action (apply/destroy)'
+        required: true
+        default: 'apply'
  
 jobs:
   terraform:
@@ -21,24 +25,28 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
  
- 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
  
     - name: Terraform Init
       run: terraform init
-      working-directory: ${{env.working-directory}}
+      working-directory: ${{ env.working-directory }}
  
     - name: Terraform Format
       run: terraform fmt 
-      working-directory: ${{env.working-directory}}
+      working-directory: ${{ env.working-directory }}
 
-    - name: Terraform plan
+    - name: Terraform Plan
       run: terraform plan 
-      working-directory: ${{env.working-directory}}
+      working-directory: ${{ env.working-directory }}
  
-    - name: Terraform Apply
-      run: terraform apply -auto-approve  
-      working-directory: ${{env.working-directory}}
-
-      
+    - name: Apply/Destroy Infrastructure
+      run: |
+        if [ "${{ github.event.inputs.action }}" == "apply" ]; then
+          terraform apply -auto-approve
+        elif [ "${{ github.event.inputs.action }}" == "destroy" ]; then
+          terraform destroy -auto-approve
+        else
+          echo "Invalid action specified."
+        fi
+      working-directory: ${{ env.working-directory }}
