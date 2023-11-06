@@ -13,7 +13,8 @@ env:
   BUCKET: newrelicpractice
   TFSTATE_FILE: terraform.tfstate
   aws_region: us-east-1
-  jobs:
+jobs:
+  test-monitor:
     runs-on : ubuntu-latest
     steps:
       - name: "Setup - Checkout"
